@@ -32,7 +32,10 @@ def temporary_context_loop(loop):
     Set the given loop as the context loop (that is, the loop returned by
     asyncio.get_event_loop() for the duration of the context)
     '''
-    old_loop = asyncio.get_event_loop()
+    try:
+        old_loop = asyncio.get_event_loop()
+    except RuntimeError:
+        old_loop = None
     asyncio.set_event_loop(loop)
     try:
         yield loop
